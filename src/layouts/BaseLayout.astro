@@ -7,11 +7,12 @@ interface Props {
 }
 
 const { title, description = 'Raghav Kaul — personal website' } = Astro.props;
+const base = import.meta.env.BASE_URL;
 const nav = [
-  { label: 'Blog', href: '/blog/' },
-  { label: 'Music', href: '/music/' },
-  { label: 'Gallery', href: '/gallery/' },
-  { label: 'Contact', href: '/contact/' },
+  { label: 'Blog',    href: `${base}blog/` },
+  { label: 'Music',   href: `${base}music/` },
+  { label: 'Gallery', href: `${base}gallery/` },
+  { label: 'Contact', href: `${base}contact/` },
 ];
 ---
 
@@ -22,18 +23,31 @@ const nav = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <title>{title}</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <link rel="sitemap" href={`${base}sitemap-index.xml`} />
+    <!-- Prevent dark-mode flash by reading localStorage before first paint -->
+    <script is:inline>
+      (function () {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = saved ?? (prefersDark ? 'dark' : 'light');
+      })();
+    </script>
   </head>
   <body>
     <header class="site-header">
       <div class="site-header-inner">
-        <a href="/" class="site-title">Raghav Kaul</a>
+        <a href={base} class="site-title">Raghav Kaul</a>
         <nav>
           <ul class="site-nav">
             {nav.map(({ label, href }) => (
               <li><a href={href}>{label}</a></li>
             ))}
+            <li>
+              <button id="theme-toggle" aria-label="Toggle dark mode" class="theme-toggle">
+                <span id="theme-icon"></span>
+              </button>
+            </li>
           </ul>
         </nav>
       </div>
@@ -46,5 +60,24 @@ const nav = [
     <footer class="site-footer">
       <p>© {new Date().getFullYear()} Raghav Kaul</p>
     </footer>
+
+    <script>
+      const btn = document.getElementById('theme-toggle')!;
+      const icon = document.getElementById('theme-icon')!;
+      const html = document.documentElement;
+
+      function applyTheme(theme: string) {
+        html.dataset.theme = theme;
+        icon.textContent = theme === 'dark' ? '☀' : '☽';
+        localStorage.setItem('theme', theme);
+      }
+
+      // Set icon on load to match current theme
+      applyTheme(html.dataset.theme ?? 'light');
+
+      btn.addEventListener('click', () => {
+        applyTheme(html.dataset.theme === 'dark' ? 'light' : 'dark');
+      });
+    </script>
   </body>
 </html>

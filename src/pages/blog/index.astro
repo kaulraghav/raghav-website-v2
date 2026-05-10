@@ -2,16 +2,16 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
+const base = import.meta.env.BASE_URL;
+
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const activeTag = Astro.url.searchParams.get('tag') ?? '';
 const filtered = activeTag ? posts.filter(p => p.data.tags.includes(activeTag)) : posts;
 
-// Collect all tags
 const allTags = [...new Set(posts.flatMap(p => p.data.tags))].sort();
 
-// Group by year-month
 const grouped = filtered.reduce<Record<string, typeof filtered>>((acc, post) => {
   const key = post.data.date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
   if (!acc[key]) acc[key] = [];
@@ -19,7 +19,6 @@ const grouped = filtered.reduce<Record<string, typeof filtered>>((acc, post) => 
   return acc;
 }, {});
 
-// Monthly archive counts (all posts, not filtered)
 const monthCounts = posts.reduce<Record<string, number>>((acc, post) => {
   const key = post.data.date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
   acc[key] = (acc[key] ?? 0) + 1;
@@ -38,9 +37,9 @@ const monthCounts = posts.reduce<Record<string, number>>((acc, post) => {
         </p>
 
         <div class="tag-list">
-          <a href="/blog/" class={`tag ${!activeTag ? 'active' : ''}`}>All</a>
+          <a href={`${base}blog/`} class={`tag ${!activeTag ? 'active' : ''}`}>All</a>
           {allTags.map(tag => (
-            <a href={`/blog/?tag=${tag}`} class={`tag ${activeTag === tag ? 'active' : ''}`}>
+            <a href={`${base}blog/?tag=${tag}`} class={`tag ${activeTag === tag ? 'active' : ''}`}>
               #{tag}
             </a>
           ))}
@@ -56,14 +55,14 @@ const monthCounts = posts.reduce<Record<string, number>>((acc, post) => {
                 </div>
                 <div>
                   <div class="feed-item-title">
-                    <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+                    <a href={`${base}blog/${post.id}/`}>{post.data.title}</a>
                   </div>
                   {post.data.description && (
                     <div class="feed-item-desc">{post.data.description}</div>
                   )}
                   <div class="tag-list" style="margin-top: 0.4rem; margin-bottom: 0">
                     {post.data.tags.map(tag => (
-                      <a href={`/blog/?tag=${tag}`} class="tag">#{tag}</a>
+                      <a href={`${base}blog/?tag=${tag}`} class="tag">#{tag}</a>
                     ))}
                   </div>
                 </div>
@@ -83,7 +82,7 @@ const monthCounts = posts.reduce<Record<string, number>>((acc, post) => {
           <ul class="sidebar-list">
             {allTags.map(tag => (
               <li>
-                <a href={`/blog/?tag=${tag}`} class={activeTag === tag ? 'active' : ''}>
+                <a href={`${base}blog/?tag=${tag}`} class={activeTag === tag ? 'active' : ''}>
                   #{tag}
                 </a>
               </li>
@@ -96,7 +95,7 @@ const monthCounts = posts.reduce<Record<string, number>>((acc, post) => {
           <ul class="sidebar-list">
             {Object.entries(monthCounts).map(([month, count]) => (
               <li>
-                <a href="/blog/">{month}</a>
+                <a href={`${base}blog/`}>{month}</a>
                 <span style="color: var(--color-muted); margin-left: 6px">({count})</span>
               </li>
             ))}

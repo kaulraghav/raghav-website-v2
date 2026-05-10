@@ -2,14 +2,16 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
+const base = import.meta.env.BASE_URL;
+
 const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
-  .map(p => ({ ...p, type: 'blog', date: p.data.date, href: `/blog/${p.id}/` }));
+  .map(p => ({ ...p, type: 'blog', date: p.data.date, href: `${base}blog/${p.id}/` }));
 
 const musicPosts = (await getCollection('music'))
-  .map(p => ({ ...p, type: 'music', date: p.data.date, href: `/music/#${p.id}` }));
+  .map(p => ({ ...p, type: 'music', date: p.data.date, href: `${base}music/#${p.id}` }));
 
 const galleryItems = (await getCollection('gallery'))
-  .map(p => ({ ...p, type: 'gallery', date: p.data.date, href: `/gallery/#${p.id}` }));
+  .map(p => ({ ...p, type: 'gallery', date: p.data.date, href: `${base}gallery/#${p.id}` }));
 
 const allItems = [...blogPosts, ...musicPosts, ...galleryItems]
   .sort((a, b) => b.date.getTime() - a.date.getTime());
@@ -71,10 +73,10 @@ const typeLabel: Record<string, string> = { blog: 'Post', music: 'Music', galler
         <div class="sidebar-section">
           <div class="sidebar-heading">Browse</div>
           <ul class="sidebar-list">
-            <li><a href="/blog/">Blog</a></li>
-            <li><a href="/music/">Music</a></li>
-            <li><a href="/gallery/">Gallery</a></li>
-            <li><a href="/contact/">Contact</a></li>
+            <li><a href={`${base}blog/`}>Blog</a></li>
+            <li><a href={`${base}music/`}>Music</a></li>
+            <li><a href={`${base}gallery/`}>Gallery</a></li>
+            <li><a href={`${base}contact/`}>Contact</a></li>
           </ul>
         </div>
       </aside>
