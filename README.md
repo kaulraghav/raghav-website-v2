@@ -1,43 +1,78 @@
-# Astro Starter Kit: Minimal
+# raghav-website-v2
+
+Personal website for Raghav Kaul — blog, music, photography.
+
+**Preview:** https://kaulraghav.github.io/raghav-website-v2
+
+## Tech stack
+
+| Layer | Tool |
+|---|---|
+| Framework | [Astro 6](https://astro.build) (static output) |
+| Hosting | GitHub Pages, deployed via GitHub Actions on push to `main` |
+| CMS | [Sveltia CMS](https://github.com/sveltia/sveltia-cms) at `/admin` |
+| CMS Auth | Cloudflare Worker OAuth proxy (`cms-auth-worker/`) |
+| Likes | [Supabase](https://supabase.com) + Google OAuth |
+
+## Local development
+
+**Prerequisites:** Node.js 22+ — install via [nvm](https://github.com/nvm-sh/nvm):
 
 ```sh
-npm create astro@latest -- --template minimal
+nvm install 22
+nvm use 22
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+### Start the dev server
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```sh
+npm install
+npm run dev
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+The dev server starts at `http://localhost:4321/raghav-website-v2`.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+### Build and preview the production output
 
-Any static assets, like images, can be placed in the `public/` directory.
+```sh
+npm run build
+npm run preview
+```
 
-## 🧞 Commands
+### Stamp post timestamps locally (optional)
 
-All commands are run from the root of the project, from a terminal:
+In production, post `date` fields are automatically stamped with the git commit
+timestamp (America/Los_Angeles) by `scripts/stamp_dates.py`. For local testing
+with accurate sort order, run it manually before building:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+```sh
+python scripts/stamp_dates.py
+npm run build
+npm run preview
+```
 
-## 👀 Want to learn more?
+Requires Python 3.9+ and a full git history (`git clone` without `--depth`).
+This modifies the local markdown files — do not commit those changes.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## Content
+
+Managed via the CMS at `/admin` (requires GitHub login via Sveltia CMS).
+
+| Type | Location |
+|---|---|
+| Blog posts | `src/content/blog/*.md` |
+| Music | `src/content/music/*.md` |
+| Gallery | `src/content/gallery/*.md` |
+| Images | `public/images/` |
+
+## Deployment
+
+Push to `main` → GitHub Actions builds Astro → deploys to GitHub Pages (~35 s).
+
+Blog post `date` fields are stamped at build time with the file's first git
+commit timestamp in PST/PDT. The source files are not modified — the stamp is
+ephemeral and only affects the build output.
+
+## Going live
+
+See `AGENTS.md` for the going-live checklist.

@@ -5,7 +5,7 @@ import { getCollection } from 'astro:content';
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime() || a.data.title.localeCompare(b.data.title));
 
 const activeTag = Astro.url.searchParams.get('tag') ?? '';
 const filtered = activeTag ? posts.filter(p => p.data.tags.includes(activeTag)) : posts;

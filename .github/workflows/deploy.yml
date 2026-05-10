@@ -19,6 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -28,6 +30,8 @@ jobs:
       - run: npm ci
 
       - uses: actions/configure-pages@v5
+
+      - run: python scripts/stamp_dates.py
 
       - run: npm run build
 

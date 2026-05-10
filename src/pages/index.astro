@@ -14,7 +14,7 @@ const galleryItems = (await getCollection('gallery'))
   .map(p => ({ ...p, type: 'gallery', date: p.data.date, href: `${base}gallery/#${p.id}` }));
 
 const allItems = [...blogPosts, ...musicPosts, ...galleryItems]
-  .sort((a, b) => b.date.getTime() - a.date.getTime());
+  .sort((a, b) => b.date.getTime() - a.date.getTime() || a.data.title.localeCompare(b.data.title));
 
 const grouped = allItems.reduce<Record<string, typeof allItems>>((acc, item) => {
   const key = item.date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
