@@ -3,8 +3,7 @@
 ## Project overview
 
 Personal website for Raghav Kaul. Source code lives in `kaulraghav/raghav-website-v2`.
-Currently deployed as a preview at `https://kaulraghav.github.io/raghav-website-v2/`.
-When ready to go live, it will replace the old site at `https://kaulraghav.github.io`.
+Deployed at `https://kaulraghav.github.io` — pushing to `main` builds and publishes automatically.
 
 ## Tech stack
 
@@ -34,27 +33,18 @@ Defined in `src/content.config.ts`. Content files live in:
 - `src/content/music/*.md` — music embeds
 - `src/content/gallery/*.md` — gallery photos
 
-## Critical: base path handling
+## Internal links
 
-The site is deployed under `/raghav-website-v2/` as a preview. All internal links must account for this.
-
-**Every page that constructs internal hrefs must use:**
+Every page that constructs internal hrefs must use:
 ```ts
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ```
 
-Then build links as `${base}blog/`, `${base}music/`, etc.
-
-**Do NOT use bare absolute paths** like `/blog/` — they will 404 under the base path.
-
-**When going live** (switching to `kaulraghav.github.io`):
-1. Remove `base: '/raghav-website-v2'` from `astro.config.mjs`
-2. The `base` variable will then resolve to `/` — all links remain correct
-3. Push built `dist/` to `master` branch of `kaulraghav/kaulraghav.github.io`
+Then build links as `${base}blog/`, `${base}music/`, etc. Do NOT use bare absolute paths like `/blog/`.
 
 ## ⚠️ Do not touch
 
-- `kaulraghav/kaulraghav.github.io` repo — this is the live old site on `master`. Do not push to it without explicit user approval.
+- `kaulraghav/kaulraghav.github.io` repo — the deploy workflow pushes built files here automatically. Do not push manually without explicit user approval.
 - Cloudflare Worker secrets (`GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`) — already set via `wrangler secret put`. Do not re-upload or log them.
 - Supabase anon key in `src/pages/blog/[slug].astro` — public by design (Supabase RLS enforces security), but do not move it server-side.
 
@@ -74,10 +64,8 @@ Workflow file: `.github/workflows/deploy.yml`.
 
 CMS saves (via Sveltia CMS at `/admin`) commit directly to `main` → same pipeline triggers.
 
-## Going live checklist (when ready)
+## Deployment
 
-- [ ] Remove `base: '/raghav-website-v2'` from `astro.config.mjs`
-- [ ] Run `npm run build` and verify
-- [ ] Push `dist/` to `master` of `kaulraghav/kaulraghav.github.io`
-- [ ] Update `public/admin/config.yml` → `repo: kaulraghav/kaulraghav.github.io`, `branch: master`
-- [ ] Update Supabase allowed redirect URLs to include `https://kaulraghav.github.io/*` (already done)
+Push to `main` → GitHub Actions builds Astro → pushes `dist/` to `kaulraghav/kaulraghav.github.io` master → live at `https://kaulraghav.github.io` (~35 seconds).
+
+CMS saves (via Sveltia CMS at `/admin`) commit directly to `main` → same pipeline triggers.

@@ -2,7 +2,7 @@
 
 Personal website for Raghav Kaul — blog, music, photography.
 
-**Preview:** https://kaulraghav.github.io/raghav-website-v2
+**Live:** https://kaulraghav.github.io
 
 ## Tech stack
 
