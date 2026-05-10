@@ -1,8 +1,8 @@
 backend:
   name: github
-  repo: kaulraghav/kaulraghav.github.io
+  repo: kaulraghav/raghav-website-v2
   branch: main
-  base_url: https://YOUR_AUTH_WORKER.pages.dev  # filled in after OAuth setup
+  base_url: https://raghav-cms-auth.kaulraghav.workers.dev
 
 media_folder: public/images
 public_folder: /images

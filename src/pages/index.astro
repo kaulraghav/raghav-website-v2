@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
 const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
   .map(p => ({ ...p, type: 'blog', date: p.data.date, href: `${base}blog/${p.id}/` }));
@@ -67,7 +67,7 @@ const typeLabel: Record<string, string> = { blog: 'Post', music: 'Music', galler
         <div class="sidebar-section">
           <div class="sidebar-heading">About</div>
           <p style="font-size:0.9rem; color: var(--color-muted); line-height: 1.6">
-            Software developer based in Tempe. I write, make music, and take photos.
+            Software developer based in the Bay. I write, make music, and take photos.
           </p>
         </div>
         <div class="sidebar-section">
