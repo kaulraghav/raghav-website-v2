@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 
 <BaseLayout title="Contact — Raghav Kaul" description="Get in touch.">
@@ -16,12 +17,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         You can also find me on
         <a href="https://github.com/kaulraghav" target="_blank" rel="noopener">GitHub</a>
         and
-        <a href="https://linkedin.com/in/kaulraghav" target="_blank" rel="noopener">LinkedIn</a>.
+        <a href="https://www.linkedin.com/in/raghavkaul/" target="_blank" rel="noopener">LinkedIn</a>.
       </p>
       <hr />
       <p>
         <strong>Resume</strong><br />
-        <a href="/resume.pdf" target="_blank">Download PDF →</a>
+        <a href={`${base}resume.pdf`} target="_blank">Download PDF →</a>
       </p>
     </div>
   </div>
