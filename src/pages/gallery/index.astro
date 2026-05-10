@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const photos = (await getCollection('gallery'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout title="Gallery — Raghav Kaul" description="Favourite photographs.">
+  <div class="container">
+    <h1 class="page-heading">Gallery</h1>
+    <p class="page-subheading">Favourite photographs.</p>
+
+    {photos.length === 0 && (
+      <p style="color: var(--color-muted)">No photos yet — check back soon.</p>
+    )}
+
+    <div class="gallery-grid">
+      {photos.map(photo => (
+        <figure class="gallery-item" id={photo.id}>
+          <img src={photo.data.image} alt={photo.data.caption} loading="lazy" />
+          <figcaption class="gallery-caption">{photo.data.caption}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

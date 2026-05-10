@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const tracks = (await getCollection('music'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout title="Music — Raghav Kaul" description="Music covers and originals.">
+  <div class="container">
+    <h1 class="page-heading">Music</h1>
+    <p class="page-subheading">Covers and originals.</p>
+
+    {tracks.length === 0 && (
+      <p style="color: var(--color-muted)">No tracks yet — check back soon.</p>
+    )}
+
+    <div class="music-grid">
+      {tracks.map(track => (
+        <div class="music-card" id={track.id}>
+          <div class="music-embed">
+            <iframe
+              src={track.data.embedUrl}
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+            />
+          </div>
+          <div class="music-info">
+            <div class="music-title">{track.data.title}</div>
+            <div style="font-size:0.8rem; color: var(--color-muted); margin-bottom: 0.35rem">
+              {track.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
+            </div>
+            {track.data.description && (
+              <div class="music-desc">{track.data.description}</div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

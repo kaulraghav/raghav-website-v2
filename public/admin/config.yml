@@ -1,0 +1,45 @@
+backend:
+  name: github
+  repo: kaulraghav/kaulraghav.github.io
+  branch: main
+  base_url: https://YOUR_AUTH_WORKER.pages.dev  # filled in after OAuth setup
+
+media_folder: public/images
+public_folder: /images
+
+collections:
+  - name: blog
+    label: Blog Posts
+    folder: src/content/blog
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: Tags, name: tags, widget: list, default: [] }
+      - { label: Description, name: description, widget: string, required: false }
+      - { label: Draft, name: draft, widget: boolean, default: false }
+      - { label: Body, name: body, widget: markdown }
+
+  - name: music
+    label: Music
+    folder: src/content/music
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: Embed URL, name: embedUrl, widget: string, hint: "YouTube embed URL (https://www.youtube.com/embed/ID) or SoundCloud embed URL" }
+      - { label: Description, name: description, widget: string, required: false }
+      - { label: Cover Image, name: coverImage, widget: image, required: false }
+
+  - name: gallery
+    label: Gallery
+    folder: src/content/gallery
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: Image, name: image, widget: image }
+      - { label: Caption, name: caption, widget: string }
